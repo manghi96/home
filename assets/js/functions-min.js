@@ -1054,18 +1054,36 @@
     })
   }
   var o = !0,
-    a = null;
-  $(this).on("mousewheel DOMMouseScroll", function (e) {
+    a = null,
+    wheelDelta = 0,
+    wheelReset = null;
+  var wheelViewport = document.getElementById("viewport");
+  var handleWheel = function (e) {
     if (!$(".outer-nav").hasClass("is-vis")) {
       e.preventDefault();
-      var i = e.originalEvent.wheelDelta ? -e.originalEvent.wheelDelta : 20 * e.originalEvent.detail;
+      var i = "number" == typeof e.deltaY && 0 !== e.deltaY ? e.deltaY : e.wheelDelta ? -e.wheelDelta : 20 * (e.detail || 0);
+      1 === e.deltaMode ? i *= 16 : 2 === e.deltaMode && (i *= wheelViewport.clientHeight);
+      Math.abs(i) <= 50 && (wheelDelta = wheelDelta > 0 && i < 0 || wheelDelta < 0 && i > 0 ? i : wheelDelta + i, clearTimeout(wheelReset), wheelReset = setTimeout(function () {
+        wheelDelta = 0
+      }, 150), i = wheelDelta);
+      Math.abs(i) > 50 && (wheelDelta = 0, clearTimeout(wheelReset));
       i > 50 && o ? (o = !1, clearTimeout(a), a = setTimeout(function () {
         o = !0
       }, 800), t(1)) : -50 > i && o && (o = !1, clearTimeout(a), a = setTimeout(function () {
         o = !0
       }, 800), t(-1))
     }
-  }), $(".side-nav li, .outer-nav li").click(function () {
+  };
+  wheelViewport.addEventListener("wheel", handleWheel, {
+    passive: !1
+  });
+  wheelViewport.addEventListener("mousewheel", handleWheel, {
+    passive: !1
+  });
+  wheelViewport.addEventListener("DOMMouseScroll", handleWheel, {
+    passive: !1
+  });
+  $(".side-nav li, .outer-nav li").click(function () {
     if (!$(this).hasClass("is-active")) {
       var t = $(this),
         n = t.parent().find(".is-active"),
