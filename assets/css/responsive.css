@@ -34,6 +34,9 @@
   }
 
   .header {
+    right: 20px;
+    left: 20px;
+    width: auto;
     height: 72px;
   }
 
@@ -44,7 +47,7 @@
   .header--nav-toggle {
     width: 44px;
     height: 44px;
-    margin-right: -8px;
+    flex: 0 0 44px;
   }
 
   .home,
@@ -300,6 +303,11 @@
   .l-wrapper {
     padding-right: 16px;
     padding-left: 16px;
+  }
+
+  .header {
+    right: 16px;
+    left: 16px;
   }
 
   .home,
